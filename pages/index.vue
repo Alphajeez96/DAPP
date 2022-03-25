@@ -19,7 +19,13 @@
               placeholder="Enter Address"
               v-model="transferAddress"
             />
-            <button @click="handleTransfer" :disabled="!transferAddress">
+
+            <input
+              type="number"
+              placeholder="Enter Amount"
+              v-model="transferAmount"
+            />
+            <button @click="handleTransfer" :disabled="isDisabled">
               Transfer funds
             </button>
           </div>
@@ -44,7 +50,7 @@
 </template>
 
 <script>
-import { abi } from "./abi.js";
+import abi from "./abi.json";
 import Web3 from "web3";
 
 export default {
@@ -52,16 +58,26 @@ export default {
 
   data: () => ({
     contractAddress: "0x86C12A724340f3F4F6142789808874d0A55Bd01f",
+    transferAddress: "0xd018a1733df6fc582c4233dde993f296a83e82c0",
     ethereumSupported: false,
-    response: null,
-    transferAddress: "0x32Be343B94f860124dC4fEe278FDCBD38C102D88",
-    test: "0x89903264edAD5cEc3abE5C48554e7e23e91Fe378",
+    contract: null,
+    loading: false,
+    transferAmount: "",
   }),
+
+  computed: {
+    isDisabled() {
+      return !this.transferAddress || !this.transferAmount || this.loading;
+    },
+
+    systemOffline() {
+      return window.navigator.onLine === false;
+    },
+  },
 
   async mounted() {
     this.ethereumSupported = await this.isEthereumSupported();
-
-    console.log("Ethereum supported:", window.web3);
+    this.checkConnection();
   },
 
   methods: {
@@ -70,8 +86,7 @@ export default {
         abi,
         this.contractAddress
       );
-      this.response = response;
-      console.log("response", this.response);
+      this.contract = response;
     },
     async isEthereumSupported() {
       if (window.ethereum) {
@@ -80,12 +95,10 @@ export default {
           // Request account access
           await window.ethereum.enable();
           this.contractConnect();
-          console.log("Ethereum enabled");
           this.handleSuccess();
-
           return true;
         } catch (error) {
-          console.log("error", error);
+          this.handleError(error);
           return false;
         }
       }
@@ -94,19 +107,24 @@ export default {
         this.handleError();
       }
     },
-
     handleTransfer() {
-      const unit = 1;
-
-      this.response.methods
-        .transfer(this.contractAddress, unit)
+      this.loading = true;
+      this.contract.methods
+        .transfer(this.transferAddress, this.transferAmount)
         .call((err, res) => {
           if (err) {
-            console.log("error", err);
+            this.handleError(err?.message ?? "An error occurred");
           } else {
-            console.log("response", res);
+            this.handleSuccess(res?.message ?? "Transaction Successful");
           }
         });
+      this.loading = false;
+    },
+
+    checkConnection() {
+      if (this.systemOffline) {
+        this.handleError("Please check your Internet Connection!");
+      }
     },
 
     handleSuccess(message) {
