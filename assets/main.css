@@ -1,0 +1,96 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f6f8;
+  font-family: "Hero New ";
+}
+
+button {
+  min-width: 160px;
+  padding: 15px;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: #fff;
+  transition: 0.45s ease all;
+  background-color: #1c4298;
+  box-shadow: 0px 3px 6px rgb(0 0 0 / 25%);
+  border: 1px solid #1c4298;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.container {
+  padding: 0px 200px;
+}
+
+/* TOAST */
+
+.toasted-container {
+  background-color: transparent !important;
+  z-index: 9999;
+  max-width: 30%;
+}
+
+.toasted-container .toasted-primary.success {
+  border-left: 2px solid #24b57a;
+  background: white !important;
+  color: #24b57a !important;
+  padding: 1rem !important;
+  font-size: 0.875rem;
+  line-height: 24px;
+}
+
+.toasted-container .toasted-primary.error {
+  border-left: 2px solid #ee3934;
+  background: white !important;
+  color: #ee3934 !important;
+  padding: 1rem !important;
+  font-size: 0.875rem;
+  line-height: 24px;
+}
+
+/* FONTS */
+@font-face {
+  font-family: "Hero New ";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./Hero New Regular.woff") format("woff");
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hero New ";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./Hero New Medium.woff") format("woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hero New ";
+  font-style: normal;
+  font-weight: 600;
+  src: url("./Hero New SemiBold.woff") format("woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hero New ";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./Hero New Bold.woff") format("woff");
+  font-display: swap;
+}
